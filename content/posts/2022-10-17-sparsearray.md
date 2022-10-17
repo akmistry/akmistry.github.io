@@ -47,7 +47,7 @@ So I did a little exploration building a sparse 256-element array.
 
 This is the dead-obvious solution to implementing a sparse array, use a hash
 table. The key is just the array index. The hash table will handle resizing
-as elements are addad and removed, so that the table will consume ~O(# of
+as elements are added and removed, so that the table will consume ~O(# of
 elements) of space at any given point in time. Insertion and lookups are
 amortised constant time.
 
@@ -91,7 +91,7 @@ pointers, hence 16 bytes). So for each element of the array, we're wasting 7
 bytes, or ~29% of the space.
 
 The solution here is to split the array indices and values into two arrays
-which are maintained in parallel. Storing the uint8's as a seperate array
+which are maintained in parallel. Storing the uint8's as a separate array
 allows them to be packed together, eliminating the wasted space, at a cost of
 some extra maintenance operations.
 
@@ -168,7 +168,7 @@ the number of elements.
 
 What's interesting is the performance between the two array implementations.
 Even though the only difference is that indices and values are split into
-separate arrays, for memory savings, there is a very noticable gap in
+separate arrays, for memory savings, there is a very noticeable gap in
 performance.
 
 ## Profiling
@@ -308,7 +308,7 @@ the map implementation (`runtime.mapaccess1`), but that's a topic for another
 day.
 
 I'll skip to what I believe is the reason for the performance gap... CPU
-caches. By locating all the indices together, we're creating spacial locallity
+caches. By locating all the indices together, we're creating spacial locality
 and increasing the rate of cache hits when doing the binary search. In this
 benchmark, on average, each sparse 256-element array contains 64 elements (at
 25% capacity). A cache line on my x86-64 CPU is 64 bytes, hence the binary
@@ -387,7 +387,7 @@ resulting in an array of 195313 pointers. Each pointer to the 256 element block
 is 16 bytes, since they are interfaces, so the array consumes 3125008 bytes
 (~3 MB). This is almost the entire L3 cache on this CPU, leaving little room
 for the sparse arrays. Since element are accessed randomly, and we're doing a
-very hand wavey analysis, we can assume that the first level in the sparse
+very hand wavy analysis, we can assume that the first level in the sparse
 vector causes no cache misses, but every access of the sparse 256-element array
 causes a cache miss.
 
