@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog-ish</title>
+    <link>https://akmistry.github.io/</link>
+    <description>Recent content on Blog-ish</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 17 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://akmistry.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>About</title>
+      <link>https://akmistry.github.io/about/</link>
+      <pubDate>Mon, 17 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://akmistry.github.io/about/</guid>
+      <description>Hi, I&amp;rsquo;m Anand. I&amp;rsquo;m a software developer living in Sydney, Australia.</description>
+    </item>
+    
+    <item>
+      <title>Hash tables, binary search, or... something else?</title>
+      <link>https://akmistry.github.io/posts/2022-10-17-sparsearray/</link>
+      <pubDate>Mon, 17 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://akmistry.github.io/posts/2022-10-17-sparsearray/</guid>
+      <description>I&amp;rsquo;ve been working on a little project (read: distraction) in Go recently, and having observed btree lookup performance was a bottleneck, I decided to write a Radix Tree.</description>
+    </item>
+    
+  </channel>
+</rss>

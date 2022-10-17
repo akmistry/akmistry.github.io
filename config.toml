@@ -1,0 +1,24 @@
+theme = "noteworthy"
+baseURL = "https://akmistry.github.io/"
+languageCode = 'en-us'
+title = "Blog-ish"
+
+paginate = 4
+summaryLength = 10
+
+[author]
+  name = "Anand Mistry"
+
+[params]
+  description = "A blog on random software/coding topics..."
+
+  linkedin = "https://www.linkedin.com/in/anand-mistry-4b14b26/"
+  github = "https://github.com/akmistry"
+  showReadMore = true
+
+[[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 1
+

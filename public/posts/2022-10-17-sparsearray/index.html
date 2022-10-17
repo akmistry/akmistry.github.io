@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+
+<html lang="en-us">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no"/>
+
+    <title>Hash tables, binary search, or... something else? | Blog-ish</title>
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#FF3DB4">
+    <meta name="theme-color" content="#ffffff">
+
+    
+    
+    
+    <link rel="stylesheet" href="https://akmistry.github.io/css/main.min.e34415025514319010e741089e6920454053855755ba465f66943ad102d2cb08.css"/>
+
+    
+    
+    
+
+    
+    
+ 
+    </head>
+
+    <body>
+        
+<nav>
+  <header>
+    <div class="site-title">
+        <a href="/">Blog-ish</a>
+    </div>  
+</header>
+
+  <div class="nav-menu">
+  
+    <a class="color-link nav-link" href="/about/">About</a>
+  
+  <a class="color-link nav-link" href="https://akmistry.github.io/index.xml" target="_blank" rel="noopener" type="application/rss+xml">RSS</a>
+</div>
+<footer class="footer">
+	<div class="social-icons">
+        
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <a class="social-icon" href="https://www.linkedin.com/in/anand-mistry-4b14b26/" target="_blank" rel="noopener" title="LinkedIn">
+        <svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" fill="#ABABAB" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink">
+            <path d="M2,3.654102 C2,2.69908141 2.79442509,1.92397846 3.77383592,1.92397846 L24.2261641,1.92397846 C25.2058917,1.92397846 26,2.69908141 26,3.654102 L26,24.3462148 C26,25.3015521 25.2058917,26.0760215 24.2261641,26.0760215 L3.77383592,26.0760215 C2.79442509,26.0760215 2,25.3015521 2,24.3465315 L2,3.65378524 L2,3.654102 Z M9.27526132,22.1415901 L9.27526132,11.2356668 L5.65030092,11.2356668 L5.65030092,22.1415901 L9.27557808,22.1415901 L9.27526132,22.1415901 Z M7.46341463,9.74691162 C8.72727273,9.74691162 9.51409566,8.90940767 9.51409566,7.86284447 C9.49033893,6.79252455 8.72727273,5.97846056 7.48748812,5.97846056 C6.24675325,5.97846056 5.43649034,6.79252455 5.43649034,7.86284447 C5.43649034,8.90940767 6.22299652,9.74691162 7.4396579,9.74691162 L7.46309788,9.74691162 L7.46341463,9.74691162 Z M11.2815965,22.1415901 L14.9062401,22.1415901 L14.9062401,16.0519481 C14.9062401,15.7263225 14.9299968,15.4000634 15.0256573,15.1675641 C15.2876148,14.5159962 15.8840672,13.8416218 16.8856509,13.8416218 C18.1970225,13.8416218 18.7218879,14.8416218 18.7218879,16.3078872 L18.7218879,22.1415901 L22.3465315,22.1415901 L22.3465315,15.8885017 C22.3465315,12.5388027 20.5584416,10.9800443 18.1735825,10.9800443 C16.2182452,10.9800443 15.3595185,12.072854 14.8824834,12.8172315 L14.9065569,12.8172315 L14.9065569,11.2359835 L11.2819132,11.2359835 C11.3291099,12.2591067 11.2815965,22.1419069 11.2815965,22.1419069 L11.2815965,22.1415901 Z"></path>
+        </svg>
+    </a>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <a class="social-icon" href="https://github.com/akmistry" target="_blank" rel="noopener" title="GitHub">
+        <svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" fill="#ABABAB" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink">
+            <path d="M13.9988029,1.32087331 C6.82105037,1.32087331 1,7.14112562 1,14.3212723 C1,20.0649109 4.72454649,24.9370678 9.89038951,26.6560892 C10.5408085,26.7757983 10.7778323,26.374374 10.7778323,26.0296121 C10.7778323,25.7215609 10.7666595,24.9035493 10.760275,23.8189856 C7.14426471,24.6042767 6.38131925,22.0760223 6.38131925,22.0760223 C5.78995672,20.5740732 4.93762853,20.1742451 4.93762853,20.1742451 C3.75729765,19.3682044 5.02701126,19.3841656 5.02701126,19.3841656 C6.33183953,19.4759425 7.01817121,20.7241085 7.01817121,20.7241085 C8.17775254,22.7104801 10.0611744,22.1366749 10.8017741,21.8038838 C10.919887,20.9643246 11.2558703,20.3913175 11.6269683,20.066507 C8.74038491,19.7385043 5.70536235,18.6228163 5.70536235,13.6413251 C5.70536235,12.2223743 6.21213051,11.0611968 7.04370914,10.1530044 C6.90963504,9.82420367 6.46351945,8.50181809 7.17139875,6.71256734 C7.17139875,6.71256734 8.26234691,6.36301702 10.7459099,8.04532771 C11.78259,7.75642995 12.8950858,7.61277914 14.000399,7.60719272 C15.1049142,7.61277914 16.2166119,7.75642995 17.2548881,8.04532771 C19.736855,6.36301702 20.8262071,6.71256734 20.8262071,6.71256734 C21.5356825,8.50181809 21.0895669,9.82420367 20.9562909,10.1530044 C21.7894656,11.0611968 22.2922435,12.2223743 22.2922435,13.6413251 C22.2922435,18.6355852 19.2524325,19.734514 16.3570705,20.0561322 C16.8231376,20.4575564 17.2389269,21.2508282 17.2389269,22.4638795 C17.2389269,24.2012564 17.2229657,25.603448 17.2229657,26.0296121 C17.2229657,26.3775663 17.4575954,26.7821827 18.116793,26.6552912 C23.2786458,24.9322794 27,20.0633148 27,14.3212723 C27,7.14112562 21.1789496,1.32087331 13.9988029,1.32087331"></path>
+        </svg>
+    </a>
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+</div>
+
+
+
+
+    <p><a href="https://github.com/kimcc/hugo-theme-noteworthy" target="_blank" rel="noopener">Noteworthy theme</a></p>
+    <p><a href="https://gohugo.io" target="_blank" rel="noopener">Built with Hugo</a></p>
+
+	<script src="https://akmistry.github.io/js/main.min.a7205ef73b078c8daed6fe1b0826e8ba229ffabbb69d299d9446cf41f2c7d8aa.js" integrity="sha256-pyBe9zsHjI2u1v4bCCbouiKf+ru2nSmdlEbPQfLH2Ko=" crossorigin="anonymous"></script>
+</footer>
+
+</nav>
+
+        <div id="content" class="content-container">
+        
+
+<h1 class="post-title">Hash tables, binary search, or... something else?</h1>
+    
+    <time>October 17, 2022</time>
+    
+    <div>
+        <p>
+        <p>I&rsquo;ve been working on a little project (read: distraction) in Go recently,
+and having observed btree lookup performance was a bottleneck, I decided to
+write a <a href="https://en.wikipedia.org/wiki/Radix_tree">Radix Tree</a>.</p>
+<p>This post is NOT about radix trees, or whether that is an appropriate data
+structure (in my benchmarks, it&rsquo;s a big win). But for those that are curious,
+the implementation can be found at
+<a href="https://github.com/akmistry/go-util/tree/master/radix-tree">https://github.com/akmistry/go-util/tree/master/radix-tree</a>.</p>
+<p>A component of the radix tree is the lookup table of children in internal
+nodes. In my case, since I was using integer keys, it made sense for the tree
+to be radix-256, where each node in the tree has a 256-element table of child
+nodes, based on the next byte in the integer key.</p>
+<p>Example:</p>
+<pre tabindex="0"><code>Lookup 0x1234
+
+Node:
+- child[0]:
+- child[1]:
+- ...
+- child[0x12]: -&gt;
+  node
+  - child[0]:
+  - child[1]:
+  - ...
+  - child[0x34]: -&gt; value
+</code></pre><p>The beauty of a radix tree is that at each node, finding the next node is an
+array lookup based on the key, and does not require any &ldquo;comparison&rdquo;
+operations per-se, except for the final element to check whether or not it
+matches the lookup key.</p>
+<p>Since the list of node children will be sparse, using a 256-element array would
+waste a lot of space.</p>
+<p>So I did a little exploration building a sparse 256-element array.</p>
+<h2 id="the-obvious-solution-hash-tables">The obvious solution: hash tables</h2>
+<p>This is the dead-obvious solution to implementing a sparse array, use a hash
+table. The key is just the array index. The hash table will handle resizing
+as elements are addad and removed, so that the table will consume ~O(# of
+elements) of space at any given point in time. Insertion and lookups are
+amortised constant time.</p>
+<p>However, there is one big problem with hash tables: they&rsquo;re unordered. Ordered
+iteration is a key requirement. Although this can be simulated with a hash
+tables, by looping over the array indices in order and probing the table to see
+if it has the element, this can be quite expensive. Particularly if the table is
+sparse. For example, if there are only 16 elements of the array populated,
+iterating over them in order would still require 256 hash tables lookups.</p>
+<h2 id="the-second-obvious-solution-ordered-array-with-binary-search">The second-obvious solution: ordered array with binary search</h2>
+<p>This solution involves storing the array index and value as a pair in an array,
+sorted by index. To lookup an array index, do a binary search over the pairs
+to find the one which has a matching array index. Space efficiency is similar
+to the hash table, but lookups are much more expense due to the binary search.
+And insertions are much more expensive due to having to shift subsequent
+elements when inserting into the middle of the array. Using an ordered array
+with binary search is a common technique, including in the B-Tree
+implementation I was formerly using:
+<a href="https://github.com/google/btree/blob/8e29150ba321eef204059de2ab494f179b6cff2c/btree.go#L190">https://github.com/google/btree/blob/8e29150ba321eef204059de2ab494f179b6cff2c/btree.go#L190</a></p>
+<p>However, this has the advantage that elements are ordered, making ordered
+iteration trivial and inexpensive.</p>
+<h2 id="a-slight-improvement-to-ordered-arrays-split-the-key-and-value-arrays">A slight improvement to ordered arrays: split the key and value arrays</h2>
+<p>Storing the array index and value as a pair has a memory usage problem.
+To demonstrate, here&rsquo;s what it would look like in Go:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">binaryArrayItem</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">index</span> <span style="color:#66d9ef">uint8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">v</span>     <span style="color:#66d9ef">interface</span>{}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Since the array will only hold 256 elements, using a single byte as the array index
+is fine. However, that byte will actually consume 8 bytes (on a 64-bit system)
+due to alignment, and the whole structure consumes 24 bytes (interfaces are 2
+pointers, hence 16 bytes). So for each element of the array, we&rsquo;re wasting 7
+bytes, or ~29% of the space.</p>
+<p>The solution here is to split the array indices and values into two arrays
+which are maintained in parallel. Storing the uint8&rsquo;s as a seperate array
+allows them to be packed together, eliminating the wasted space, at a cost of
+some extra maintenance operations.</p>
+<p>Again, this technique is well known for cases where the struct elements can&rsquo;t
+be packed together. In fact, Go&rsquo;s map implementation does exactly this for the
+same reason:
+<a href="https://github.com/golang/go/blob/7feb68728dda2f9d86c0a1158307212f5a4297ce/src/runtime/map.go#L156">https://github.com/golang/go/blob/7feb68728dda2f9d86c0a1158307212f5a4297ce/src/runtime/map.go#L156</a></p>
+<h2 id="measuring-performance">Measuring performance</h2>
+<p>With three implementation, it&rsquo;s probably a good idea to measure performance to
+compare them. My test system is an old Intel i5-6260U desktop, running Ubuntu
+22.04 with a 5.15 kernel.</p>
+<p>To compare the implementations, I wrote a basic sparse-ish vector
+implementation to make use of sparse 256-element array:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Sparse256Array</span> <span style="color:#66d9ef">interface</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Put</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">uint8</span>, <span style="color:#a6e22e">v</span> <span style="color:#66d9ef">interface</span>{})
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">uint8</span>) <span style="color:#66d9ef">interface</span>{}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">SparseishVector</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">blocks</span> []<span style="color:#a6e22e">Sparse256Array</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">len</span>    <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewSparseishVector</span>(<span style="color:#a6e22e">length</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">allocArray</span> <span style="color:#66d9ef">func</span>() <span style="color:#a6e22e">Sparse256Array</span>) <span style="color:#f92672">*</span><span style="color:#a6e22e">SparseishVector</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">SparseishVector</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">blocks</span>: make([]<span style="color:#a6e22e">Sparse256Array</span>, (<span style="color:#a6e22e">length</span><span style="color:#f92672">+</span><span style="color:#ae81ff">255</span>)<span style="color:#f92672">/</span><span style="color:#ae81ff">256</span>),
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">len</span>:    <span style="color:#a6e22e">length</span>,
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">blocks</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">blocks</span>[<span style="color:#a6e22e">i</span>] = <span style="color:#a6e22e">allocArray</span>()
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">v</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">v</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">SparseishVector</span>) <span style="color:#a6e22e">Put</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">val</span> <span style="color:#66d9ef">interface</span>{}) {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">blocks</span>[<span style="color:#a6e22e">i</span><span style="color:#f92672">/</span><span style="color:#ae81ff">256</span>].<span style="color:#a6e22e">Put</span>(uint8(<span style="color:#a6e22e">i</span>), <span style="color:#a6e22e">val</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">v</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">SparseishVector</span>) <span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">interface</span>{} {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">blocks</span>[<span style="color:#a6e22e">i</span><span style="color:#f92672">/</span><span style="color:#ae81ff">256</span>].<span style="color:#a6e22e">Get</span>(uint8(<span style="color:#a6e22e">i</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The goal here is to be a testbed for the various array implementations, and
+not something that would actually be used in real-life.</p>
+<p>With this, I create a vector with a capacity of 50 million elements, and
+randomly populate it to between 1% and 99% capacity. Then, do a lookup on those
+populated elements:</p>
+<table>
+<thead>
+<tr>
+<th>Percent Full</th>
+<th>MapArray</th>
+<th>BinaryArray</th>
+<th>SplitBinaryArray</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>280.1 ns/op</td>
+<td>202.9 ns/op</td>
+<td>219.5 ns/op</td>
+</tr>
+<tr>
+<td>5</td>
+<td>303.7 ns/op</td>
+<td>349.0 ns/op</td>
+<td>352.6 ns/op</td>
+</tr>
+<tr>
+<td>10</td>
+<td>320.8 ns/op</td>
+<td>423.6 ns/op</td>
+<td>374.9 ns/op</td>
+</tr>
+<tr>
+<td>25</td>
+<td>340.6 ns/op</td>
+<td>520.6 ns/op</td>
+<td>400.4 ns/op</td>
+</tr>
+<tr>
+<td>50</td>
+<td>370.7 ns/op</td>
+<td>563.9 ns/op</td>
+<td>418.1 ns/op</td>
+</tr>
+<tr>
+<td>75</td>
+<td>351.1 ns/op</td>
+<td>586.2 ns/op</td>
+<td>433.1 ns/op</td>
+</tr>
+<tr>
+<td>90</td>
+<td>353.1 ns/op</td>
+<td>593.0 ns/op</td>
+<td>453.9 ns/op</td>
+</tr>
+<tr>
+<td>95</td>
+<td>352.3 ns/op</td>
+<td>585.0 ns/op</td>
+<td>431.0 ns/op</td>
+</tr>
+<tr>
+<td>99</td>
+<td>363.5 ns/op</td>
+<td>595.3 ns/op</td>
+<td>428.6 ns/op</td>
+</tr>
+</tbody>
+</table>
+<p>(All the benchmarking code can be found at TODO(insert URL))</p>
+<p>As expected, the hash table is fast and performance is fairly consistent, due
+to the O(1) lookups. Although the hash tables starts off slower, that can
+likely be attributed to the overhead of using a hash table (i.e. key hashing).
+The two arrays are much slower, as expected, due to binary searching. And both
+arrays get slower as the table is filled, since binary search is O(log n) on
+the number of elements.</p>
+<p>What&rsquo;s interesting is the performance between the two array implementations.
+Even though the only difference is that indices and values are split into
+separate arrays, for memory savings, there is a very noticable gap in
+performance.</p>
+<h2 id="profiling">Profiling</h2>
+<p>We can use Go&rsquo;s built-in profiler to look at where the CPU is being spent
+in the two array implementations.</p>
+<p>Before looking at the profiles, it needs to be noted that the benchmarks have
+very high setup overhead. So I&rsquo;ll only look at the array implementations, and
+not the benchmark as a whole.</p>
+<p>Let&rsquo;s have a look at Get() performance at 25% capacity:</p>
+<pre tabindex="0"><code>% go test -bench &#39;Get/^BinaryArray/25&#39; -cpuprofile cpu.prof
+goos: linux
+goarch: amd64
+pkg: github.com/akmistry/random-tests/sparsevec
+cpu: Intel(R) Core(TM) i5-6260U CPU @ 1.80GHz
+BenchmarkArrayGet/BinaryArray/25%-4            2346938         502.8 ns/op
+PASS
+ok    github.com/akmistry/random-tests/sparsevec  8.400s
+% go tool pprof cpu.prof
+Total: 9.01s
+ROUTINE ======================== sparsevec.(*BinaryArray).Get
+     290ms      1.36s (flat, cum) 15.09% of Total
+         .          .    101:   a.items[index].index = i
+         .          .    102:   a.items[index].v = v
+         .          .    103: }
+         .          .    104:}
+         .          .    105:
+      20ms       20ms    106:func (a *BinaryArray) Get(i uint8) interface{} {
+     270ms      1.34s    107: index := sort.Search(len(a.items), func(n int) bool {
+         .          .    108:   return a.items[n].index &gt;= i
+         .          .    109: })
+         .          .    110: if index &lt; len(a.items) &amp;&amp; a.items[index].index == i {
+         .          .    111:   return a.items[index].v
+         .          .    112: }
+ROUTINE ======================== sparsevec.(*BinaryArray).Get.func1
+     850ms      850ms (flat, cum)  9.43% of Total
+         .          .    102:   a.items[index].v = v
+         .          .    103: }
+         .          .    104:}
+         .          .    105:
+         .          .    106:func (a *BinaryArray) Get(i uint8) interface{} {
+      10ms       10ms    107: index := sort.Search(len(a.items), func(n int) bool {
+     840ms      840ms    108:   return a.items[n].index &gt;= i
+         .          .    109: })
+         .          .    110: if index &lt; len(a.items) &amp;&amp; a.items[index].index == i {
+         .          .    111:   return a.items[index].v
+         .          .    112: }
+         .          .    113: return nil
+</code></pre><p>We can see binary searching dominating performance. But looking at the split
+array, it tells a slightly different story:</p>
+<pre tabindex="0"><code>% go test -bench &#39;Get/^SplitBinaryArray/25&#39; -cpuprofile cpu.prof
+goos: linux
+goarch: amd64
+pkg: github.com/akmistry/random-tests/sparsevec
+cpu: Intel(R) Core(TM) i5-6260U CPU @ 1.80GHz
+BenchmarkArrayGet/SplitBinaryArray/25%-4           3011503         402.1 ns/op
+PASS
+ok    github.com/akmistry/random-tests/sparsevec  8.171s
+% go tool pprof cpu.prof
+...
+(pprof) list SplitBinaryArray
+Total: 8.30s
+ROUTINE ======================== sparsevec.(*SplitBinaryArray).Get
+     770ms      1.45s (flat, cum) 17.47% of Total
+         .          .    146:   a.values[index] = v
+         .          .    147: }
+         .          .    148:}
+         .          .    149:
+         .          .    150:func (a *SplitBinaryArray) Get(i uint8) interface{} {
+     330ms      1.01s    151: index := sort.Search(len(a.indexes), func(n int) bool {
+         .          .    152:   return a.indexes[n] &gt;= i
+         .          .    153: })
+      30ms       30ms    154: if index &lt; len(a.indexes) &amp;&amp; a.indexes[index] == i {
+     410ms      410ms    155:   return a.values[index]
+         .          .    156: }
+         .          .    157: return nil
+         .          .    158:}
+         .          .    159:
+         .          .    160:type BitmapArray struct {
+ROUTINE ======================== sparsevec.(*SplitBinaryArray).Get.func1
+     440ms      440ms (flat, cum)  5.30% of Total
+         .          .    146:   a.values[index] = v
+         .          .    147: }
+         .          .    148:}
+         .          .    149:
+         .          .    150:func (a *SplitBinaryArray) Get(i uint8) interface{} {
+      30ms       30ms    151: index := sort.Search(len(a.indexes), func(n int) bool {
+     410ms      410ms    152:   return a.indexes[n] &gt;= i
+         .          .    153: })
+         .          .    154: if index &lt; len(a.indexes) &amp;&amp; a.indexes[index] == i {
+         .          .    155:   return a.values[index]
+         .          .    156: }
+         .          .    157: return nil
+</code></pre><p>Here, although binary searching still dominates, it&rsquo;s only ~70% of the time as
+opposed to ~98%. And since SplitBinaryArray is generally faster, the binary
+search itself is also taking less time absolutely.</p>
+<p>And for comparison, lets have a look at the map version:</p>
+<pre tabindex="0"><code>% go test -bench &#39;Get/^MapArray/25&#39; -cpuprofile cpu.prof
+goos: linux
+goarch: amd64
+pkg: github.com/akmistry/random-tests/sparsevec
+cpu: Intel(R) Core(TM) i5-6260U CPU @ 1.80GHz
+BenchmarkArrayGet/MapArray/25%-4           3579357         343.9 ns/op
+PASS
+ok    github.com/akmistry/random-tests/sparsevec  9.868s
+% go tool pprof cpu.prof
+(pprof) list MapArray
+Total: 11.45s
+ROUTINE ======================== sparsevec.(*MapArray).Get
+      60ms      1.42s (flat, cum) 12.40% of Total
+         .          .     65: } else {
+         .          .     66:   a.m[i] = v
+         .          .     67: }
+         .          .     68:}
+         .          .     69:
+      10ms       10ms     70:func (a *MapArray) Get(i uint8) interface{} {
+      50ms      1.41s     71: return a.m[i]
+         .          .     72:}
+         .          .     73:
+         .          .     74:type binaryArrayItem struct {
+         .          .     75: index uint8
+         .          .     76: v     interface{}
+</code></pre><p>&hellip; which doesn&rsquo;t really tell us anything. We&rsquo;d have to have a closer look at
+the map implementation (<code>runtime.mapaccess1</code>), but that&rsquo;s a topic for another
+day.</p>
+<p>I&rsquo;ll skip to what I believe is the reason for the performance gap&hellip; CPU
+caches. By locating all the indices together, we&rsquo;re creating spacial locallity
+and increasing the rate of cache hits when doing the binary search. In this
+benchmark, on average, each sparse 256-element array contains 64 elements (at
+25% capacity). A cache line on my x86-64 CPU is 64 bytes, hence the binary
+search of indices will usually only hit a single cache line (the average should
+be just over 1). Even in the worst case of 256 elements, the entire array of
+indices will only be 256 bytes, which spans 4 cache lines. And the binary
+search will only hit at most 3 cache lines.</p>
+<p>Compare this to the first array implementation, which keeps index and values
+together. The pair structure, as notes above, is 24 bytes, and only 2 of these
+will fit in a cache line. A binary search of 64 elements needs to read 6 of
+them. Since the pairs are contiguous in memory, the final two comparisons may
+share a cache line, but the rest will not. Hence the binary search will result
+in hitting 5 cache lines. Compared to 1 in the split array case, it&rsquo;s clear
+why the split array is a winner in terms of performance.</p>
+<p>What I&rsquo;ve said above is theory, but we can measure this in practice using
+the perf tool which is part of the Linux kernel source:</p>
+<pre tabindex="0"><code>% perf stat -d -- go test -bench &#39;Get/^BinaryArray/25&#39;
+...
+BenchmarkArrayGet/BinaryArray/25%-4            2424010         494.0 ns/op
+...
+        46,498,378      LLC-loads                 #    4.308 M/sec                    (50.20%)
+        36,644,241      LLC-load-misses           #   78.81% of all LL-cache accesses  (50.08%)
+...
+% perf stat -d -- go test -bench &#39;Get/^SplitBinaryArray/25&#39;
+...
+BenchmarkArrayGet/SplitBinaryArray/25%-4           3099848         393.9 ns/op
+...
+        37,477,212      LLC-loads                 #    3.715 M/sec                    (50.39%)
+        21,858,623      LLC-load-misses           #   58.33% of all LL-cache accesses  (50.04%)
+...
+</code></pre><p>I noted above these benchmarks have a high setup overhead, so I&rsquo;ll establish a
+baseline by commenting out the Get() calls from the benchmark:</p>
+<pre tabindex="0"><code> % perf stat -d -- go test -bench &#39;Get/^BinaryArray/25&#39;
+...
+BenchmarkArrayGet/BinaryArray/25%-4           100000000         10.02 ns/op
+...
+        12,022,320      LLC-loads                 #    1.182 M/sec                    (50.04%)
+         3,956,669      LLC-load-misses           #   32.91% of all LL-cache accesses  (50.34%)
+...
+% perf stat -d -- go test -bench &#39;Get/^SplitBinaryArray/25&#39;
+...
+BenchmarkArrayGet/SplitBinaryArray/25%-4          100000000         10.04 ns/op
+...
+        11,113,549      LLC-loads                 #    1.160 M/sec                    (50.45%)
+         3,204,466      LLC-load-misses           #   28.83% of all LL-cache accesses  (50.48%)
+...
+</code></pre><p>We can see that even though the split array benchmark does more operations, it
+results in fewer LLC (last-level-cache, the L3 cache on this CPU) cache misses.
+We can do a back-of-the-envelope calculation to see cache-misses per op:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Ops</th>
+<th>LLC-misses</th>
+<th>Baseline</th>
+<th>LLC-misses - baseline</th>
+<th>Misses/op</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BinaryArray</td>
+<td>2424010</td>
+<td>36644241</td>
+<td>3956669</td>
+<td>32687572</td>
+<td>13.48491631635183</td>
+</tr>
+<tr>
+<td>SplitBinaryArray</td>
+<td>3099848</td>
+<td>21858623</td>
+<td>3204466</td>
+<td>18654157</td>
+<td>6.01776506460962</td>
+</tr>
+</tbody>
+</table>
+<p>As expected, there is a significant difference in misses/op between the two.
+Note that in both cases, the misses/op is much higher than expected. There are
+lots of other things going on in the benchmarking framework, Go runtime, other
+system activity (like me writing this post in vim). And also keep in mind that
+the reported number of operations is NOT the total number, but rather the
+number of operations in the final benchmark loop. These numbers should be
+compared to each other, not taken as absolute values (I&rsquo;m not doing a rigorous
+analysis here).</p>
+<p>It&rsquo;s important to note why there are so many cache misses. This is intentional
+by design of the benchmark. I noted that the sparse vector has a capacity of
+50 million elements. The vector of 50 million is split into blocks of 256 elements,
+resulting in an array of 195313 pointers. Each pointer to the 256 element block
+is 16 bytes, since they are interfaces, so the array consumes 3125008 bytes
+(~3 MB). This is almost the entire L3 cache on this CPU, leaving little room
+for the sparse arrays. Since element are accessed randomly, and we&rsquo;re doing a
+very hand wavey analysis, we can assume that the first level in the sparse
+vector causes no cache misses, but every access of the sparse 256-element array
+causes a cache miss.</p>
+<h2 id="a-different-approach">A different approach?</h2>
+<p>Since binary searching is expensive, and I want to maintain ordering, I
+wondered if there was another way to go. My first thought was to use a
+present/not-present bitmap to avoid searching for an element that isn&rsquo;t in the
+array, but that has limited utility since negative lookups are relatively in my
+usage.</p>
+<p>But thinking more about using the bitmap, I realised it could be used to avoid
+the binary search entirely.</p>
+<p>Quickly, for a 256-element array, the bitmap would be 256 entries, one for each
+element of the array. A bitmap entry would be true if the corresponding index
+existed in the array, and false otherwise. The first observation is that the
+count of true bits in the bitmap (the &ldquo;population count&rdquo;) is the same as the
+number of elements in the sparse array. The second observation follows from the
+first. For any [0, N) subset of the array, the number of elements in the sparse
+array is the count of true bits in the [0, N) subset of the bitmap. This feels
+obvious when spelled out. But that means the element at for array index N is at
+position true count [0, N) in the sparse array.</p>
+<p>We can look at this property by induction. For array element 0, it is always at
+position 0 in the sparse array. This is the base case. For array element 1, if
+array element 0 exist in the sparse array, element 1 will be at position 1.
+This is the case of a &ldquo;normal&rdquo; dense array. But if element 0 is missing, it will
+be at position 0 instead. This leads to the inductive case:</p>
+<pre tabindex="0"><code>Let &#39;i&#39; be the index into the 256-element array.
+Let S(i) be the index into the sparse array correspoding to element &#39;i&#39;
+Let B(i) be the bitmap entry for element &#39;i&#39;:
+    True if the element exists,
+    False otherwise
+
+S(i+i) = S(i) + { 1 if B(i) == true
+                { 0 if B(i) == false
+</code></pre><p>Coding this up is pretty straight forward. Looking at lookup performance:</p>
+<table>
+<thead>
+<tr>
+<th>Percent Full</th>
+<th>MapArray</th>
+<th>BinaryArray</th>
+<th>SplitBinaryArray</th>
+<th>BitmapArray</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>280.1 ns/op</td>
+<td>202.9 ns/op</td>
+<td>219.5 ns/op</td>
+<td>159.1 ns/op</td>
+</tr>
+<tr>
+<td>5</td>
+<td>303.7 ns/op</td>
+<td>349.0 ns/op</td>
+<td>352.6 ns/op</td>
+<td>174.3 ns/op</td>
+</tr>
+<tr>
+<td>10</td>
+<td>320.8 ns/op</td>
+<td>423.6 ns/op</td>
+<td>374.9 ns/op</td>
+<td>172.3 ns/op</td>
+</tr>
+<tr>
+<td>25</td>
+<td>340.6 ns/op</td>
+<td>520.6 ns/op</td>
+<td>400.4 ns/op</td>
+<td>190.4 ns/op</td>
+</tr>
+<tr>
+<td>50</td>
+<td>370.7 ns/op</td>
+<td>563.9 ns/op</td>
+<td>418.1 ns/op</td>
+<td>210.1 ns/op</td>
+</tr>
+<tr>
+<td>75</td>
+<td>351.1 ns/op</td>
+<td>586.2 ns/op</td>
+<td>433.1 ns/op</td>
+<td>215.1 ns/op</td>
+</tr>
+<tr>
+<td>90</td>
+<td>353.1 ns/op</td>
+<td>593.0 ns/op</td>
+<td>453.9 ns/op</td>
+<td>208.9 ns/op</td>
+</tr>
+<tr>
+<td>95</td>
+<td>352.3 ns/op</td>
+<td>585.0 ns/op</td>
+<td>431.0 ns/op</td>
+<td>204.4 ns/op</td>
+</tr>
+<tr>
+<td>99</td>
+<td>363.5 ns/op</td>
+<td>595.3 ns/op</td>
+<td>428.6 ns/op</td>
+<td>208.2 ns/op</td>
+</tr>
+</tbody>
+</table>
+<p>Lookup performance is consistently better than the other three implementations.
+Although the lack of binary search is a big reason for the performance
+difference, another big part is the cache efficiency. A 256-element bitmap
+consumes 32 bytes (256 / 8 bits/byte). In Go, a slice is 24 bytes. Therefore,
+the bitmap plus slice can fit in a single cache line (with room to spare).
+Determining the position in the sparse array of an element only accesses a
+single cache line, in all cases. Retrieving the element itself is another 1
+cache line access. So we have at most 2 misses, always. We can see this
+in the perf tool:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Ops</th>
+<th>LLC-misses</th>
+<th>Baseline</th>
+<th>LLC-misses - baseline</th>
+<th>Misses/op</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MapArray</td>
+<td>3570840</td>
+<td>29920283</td>
+<td>5538842</td>
+<td>24381441</td>
+<td>6.8279287226534935</td>
+</tr>
+<tr>
+<td>BinaryArray</td>
+<td>2424010</td>
+<td>36644241</td>
+<td>3956669</td>
+<td>32687572</td>
+<td>13.48491631635183</td>
+</tr>
+<tr>
+<td>SplitBinaryArray</td>
+<td>3099848</td>
+<td>21858623</td>
+<td>3204466</td>
+<td>18654157</td>
+<td>6.01776506460962</td>
+</tr>
+<tr>
+<td>BitmapArray</td>
+<td>6534843</td>
+<td>25315941</td>
+<td>2918852</td>
+<td>22397089</td>
+<td>3.4273339084045324</td>
+</tr>
+</tbody>
+</table>
+<h2 id="caveats">Caveats</h2>
+<p>There are a few big gotchas to what I&rsquo;ve written. The biggest one is that I&rsquo;ve
+only considered lookup performance. Insertion and deletion are are also
+important. The performance of these operations is affected by slightly
+different factors (i.e. memcpy() performance), but some aspects are the same
+(i.e. binary search cost). Since my application is dominated by lookup
+performance, I&rsquo;ve chosen to focus on that.</p>
+<p>Another factor is that my benchmark CPU is ~7 years old. CPUs today have bigger
+caches, improved performance on certain operations (i.e. memcpy), and are just
+generally better. The performance trade-offs might be different.</p>
+<p>Lastly, a 256-element sparse array is a VERY specialised data structure with
+specific use cases. I don&rsquo;t expect what I&rsquo;ve written to be generally applicable.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Do I need to have a conclusion? Sorry, I don&rsquo;t have one. Well, maybe that
+general purpose data structures are just that, general purpose. You might be
+able to do better if you can specialise to your needs. But beware, it might not
+be reusable for any other case.</p>
+
+        </p>
+    </div>
+    
+
+    
+
+    <div class="page-footer">
+        
+    </div>
+
+
+        
+        </div>
+        <footer class="footer-mobile">
+	<div class="social-icons">
+        
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <a class="social-icon" href="https://www.linkedin.com/in/anand-mistry-4b14b26/" target="_blank" rel="noopener" title="LinkedIn">
+        <svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" fill="#ABABAB" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink">
+            <path d="M2,3.654102 C2,2.69908141 2.79442509,1.92397846 3.77383592,1.92397846 L24.2261641,1.92397846 C25.2058917,1.92397846 26,2.69908141 26,3.654102 L26,24.3462148 C26,25.3015521 25.2058917,26.0760215 24.2261641,26.0760215 L3.77383592,26.0760215 C2.79442509,26.0760215 2,25.3015521 2,24.3465315 L2,3.65378524 L2,3.654102 Z M9.27526132,22.1415901 L9.27526132,11.2356668 L5.65030092,11.2356668 L5.65030092,22.1415901 L9.27557808,22.1415901 L9.27526132,22.1415901 Z M7.46341463,9.74691162 C8.72727273,9.74691162 9.51409566,8.90940767 9.51409566,7.86284447 C9.49033893,6.79252455 8.72727273,5.97846056 7.48748812,5.97846056 C6.24675325,5.97846056 5.43649034,6.79252455 5.43649034,7.86284447 C5.43649034,8.90940767 6.22299652,9.74691162 7.4396579,9.74691162 L7.46309788,9.74691162 L7.46341463,9.74691162 Z M11.2815965,22.1415901 L14.9062401,22.1415901 L14.9062401,16.0519481 C14.9062401,15.7263225 14.9299968,15.4000634 15.0256573,15.1675641 C15.2876148,14.5159962 15.8840672,13.8416218 16.8856509,13.8416218 C18.1970225,13.8416218 18.7218879,14.8416218 18.7218879,16.3078872 L18.7218879,22.1415901 L22.3465315,22.1415901 L22.3465315,15.8885017 C22.3465315,12.5388027 20.5584416,10.9800443 18.1735825,10.9800443 C16.2182452,10.9800443 15.3595185,12.072854 14.8824834,12.8172315 L14.9065569,12.8172315 L14.9065569,11.2359835 L11.2819132,11.2359835 C11.3291099,12.2591067 11.2815965,22.1419069 11.2815965,22.1419069 L11.2815965,22.1415901 Z"></path>
+        </svg>
+    </a>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <a class="social-icon" href="https://github.com/akmistry" target="_blank" rel="noopener" title="GitHub">
+        <svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" fill="#ABABAB" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink">
+            <path d="M13.9988029,1.32087331 C6.82105037,1.32087331 1,7.14112562 1,14.3212723 C1,20.0649109 4.72454649,24.9370678 9.89038951,26.6560892 C10.5408085,26.7757983 10.7778323,26.374374 10.7778323,26.0296121 C10.7778323,25.7215609 10.7666595,24.9035493 10.760275,23.8189856 C7.14426471,24.6042767 6.38131925,22.0760223 6.38131925,22.0760223 C5.78995672,20.5740732 4.93762853,20.1742451 4.93762853,20.1742451 C3.75729765,19.3682044 5.02701126,19.3841656 5.02701126,19.3841656 C6.33183953,19.4759425 7.01817121,20.7241085 7.01817121,20.7241085 C8.17775254,22.7104801 10.0611744,22.1366749 10.8017741,21.8038838 C10.919887,20.9643246 11.2558703,20.3913175 11.6269683,20.066507 C8.74038491,19.7385043 5.70536235,18.6228163 5.70536235,13.6413251 C5.70536235,12.2223743 6.21213051,11.0611968 7.04370914,10.1530044 C6.90963504,9.82420367 6.46351945,8.50181809 7.17139875,6.71256734 C7.17139875,6.71256734 8.26234691,6.36301702 10.7459099,8.04532771 C11.78259,7.75642995 12.8950858,7.61277914 14.000399,7.60719272 C15.1049142,7.61277914 16.2166119,7.75642995 17.2548881,8.04532771 C19.736855,6.36301702 20.8262071,6.71256734 20.8262071,6.71256734 C21.5356825,8.50181809 21.0895669,9.82420367 20.9562909,10.1530044 C21.7894656,11.0611968 22.2922435,12.2223743 22.2922435,13.6413251 C22.2922435,18.6355852 19.2524325,19.734514 16.3570705,20.0561322 C16.8231376,20.4575564 17.2389269,21.2508282 17.2389269,22.4638795 C17.2389269,24.2012564 17.2229657,25.603448 17.2229657,26.0296121 C17.2229657,26.3775663 17.4575954,26.7821827 18.116793,26.6552912 C23.2786458,24.9322794 27,20.0633148 27,14.3212723 C27,7.14112562 21.1789496,1.32087331 13.9988029,1.32087331"></path>
+        </svg>
+    </a>
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+</div>
+
+
+
+
+	<div class="footer-mobile-links">
+        <p><a href="https://github.com/kimcc/hugo-theme-noteworthy" target="_blank" rel="noopener">Noteworthy theme</a></p>
+		<span class="divider-bar">|</span>
+        <p><a href="https://gohugo.io" target="_blank" rel="noopener">Built with Hugo</a></p>
+	</div>
+
+	<script src="https://akmistry.github.io/js/main.min.a7205ef73b078c8daed6fe1b0826e8ba229ffabbb69d299d9446cf41f2c7d8aa.js" integrity="sha256-pyBe9zsHjI2u1v4bCCbouiKf+ru2nSmdlEbPQfLH2Ko=" crossorigin="anonymous"></script>
+</footer>
+
+    </body>
+</html>
