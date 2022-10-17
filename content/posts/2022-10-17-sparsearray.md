@@ -157,7 +157,7 @@ populated elements:
 | 95 | 352.3 ns/op | 585.0 ns/op | 431.0 ns/op |
 | 99 | 363.5 ns/op | 595.3 ns/op | 428.6 ns/op |
 
-(All the benchmarking code can be found at TODO(insert URL))
+(All the benchmarking code can be found at https://github.com/akmistry/akmistry.github.io/tree/main/source/2022-10-17-sparsearray)
 
 As expected, the hash table is fast and performance is fairly consistent, due
 to the O(1) lookups. Although the hash tables starts off slower, that can
