@@ -2,6 +2,7 @@ theme = "noteworthy"
 baseURL = "https://akmistry.github.io/"
 languageCode = 'en-us'
 title = "Blog-ish"
+googleAnalytics = "G-B08XH35R2G"
 
 paginate = 4
 summaryLength = 10
